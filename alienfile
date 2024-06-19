@@ -44,12 +44,20 @@ share {
         die "Configuration error" unless @libs;
 
         $_->copy( $libdir->child( 'lib' . $_->basename ) ) for @libs;
+        if ( $arch_name eq 'armel' ) {
+            my @libs = $libdir->children;
+            # Should be just Linux .so but let's be agnostic
+            my ( $armel_lib ) = grep { /_armel\./ } @libs;
+            my ( $orig_lib ) = grep { /sunvox\.[a-z]+$/ } @libs;
+            my $armhf_lib = $armel_lib =~ s/_armel/_armhf/r;
+            $orig_lib->move( $armhf_lib );
+            $armel_lib->move( $orig_lib );
+        }
         $_->copy( $incdir ) for ( path('headers')->children( qr/\.h$/ ) );
 
         path( $_ )->remove_tree for qw/ android headers ios js linux macos windows /;
     };
 
-#return;
     start_url SUNVOX_LIB_HOMEPAGE;
     plugin 'Download' => (
         filter => SUNVOX_LIB_FILE_FILTER,
