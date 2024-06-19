@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package Alien::SunVox;
 
-# ABSTRACT: Install SunVox
+# ABSTRACT: Install The SunVox Library
 
 our $VERSION = '0.00';
 
