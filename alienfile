@@ -31,6 +31,18 @@ my $arch = $arch_map->{ $arch_name };
 my $os   = $os_map->{ $^O };
 my $ext  = quotemeta $ext_map->{ $^O };
 
+my $valid_combos = {
+    map {
+        $_ => 1
+    } qw/ linux-arm linux-arm64 linux-x86 linux-x86_64
+          windows-x86 windows-x86_64
+          macos-arm64 macos-x86_64 /
+};
+
+my $combo = "$os-$arch";
+die "SunVox library unavailable for $os $arch_name - skipping download"
+    unless $valid_combos->{ $combo };
+
 share {
     requires 'Path::Tiny';
     require Path::Tiny; Path::Tiny->import;
