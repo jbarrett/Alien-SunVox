@@ -9,13 +9,15 @@ use constant {
 my $os_map = {
     linux   => 'linux',
     MSWin32 => 'windows',
-    darwin  => 'macos'
+    darwin  => 'macos',
+    cygwin  => 'windows',
 };
 
 my $ext_map = {
     linux   => '.so',
     MSWin32 => '.dll',
-    darwin  => '.dylib'
+    darwin  => '.dylib',
+    cygwin  => '.dll',
 };
 
 my $arch_map = {
@@ -23,10 +25,11 @@ my $arch_map = {
     armel   => 'arm',
     armhf   => 'arm',
     x86     => 'x86',
-    x86_64  => 'x86_64'
+    x86_64  => 'x86_64',
 };
 
 my $arch_name = meta->prop->{platform}{cpu}{arch}{name};
+$arch_name = 'x86_64' if $^O eq 'cygwin';
 my $arch = $arch_map->{ $arch_name };
 my $os   = $os_map->{ $^O };
 my $ext  = quotemeta $ext_map->{ $^O };
